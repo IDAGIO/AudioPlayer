@@ -822,7 +822,9 @@ public class AudioPlayer: NSObject {
     public func remoteControlReceivedWithEvent(event: UIEvent) {
         if event.type == .RemoteControl {
             //ControlCenter Or Lock screen
-            delegate?.audioPlayer(self, didReceiveRemoteControlEvent: event.subtype, forItem: currentItem)
+            if let currentItem = currentItem {
+                delegate?.audioPlayer(self, didReceiveRemoteControlEvent: event.subtype, forItem: currentItem)
+            }
             switch event.subtype {
             case .RemoteControlBeginSeekingBackward:
                 rate = -(rate * rateMultiplerOnSeeking)
@@ -1052,7 +1054,9 @@ public class AudioPlayer: NSObject {
     */
     @objc private func playerItemDidEnd(note: NSNotification) {
         if let sender = note.object as? AVPlayerItem, currentItem = player?.currentItem where sender == currentItem {
-            delegate?.audioPlayer(self, didFinishPlayingItem: currentItem)
+            if let currentItem = self.currentItem {
+                delegate?.audioPlayer(self, didFinishPlayingItem: currentItem)
+            }
             nextOrStop()
         }
     }
