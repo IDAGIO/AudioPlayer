@@ -233,16 +233,6 @@ public protocol AudioPlayerDelegate: NSObjectProtocol {
      - parameter item:        Current item.
      */
     func audioPlayer(audioPlayer: AudioPlayer, didLoadRange range: AudioPlayer.TimeRange, forItem item: AudioItem)
-
-    /**
-     This method gets called whenever the audio player receives a remote
-     control event.
-
-     - parameter audioPlayer: The audio player.
-     - parameter subType:     The event subtype (see: https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIEvent_Class/#//apple_ref/c/tdef/UIEventSubtype).
-     - parameter item:        Current item.
-     */
-    func audioPlayer(audioPlayer: AudioPlayer, didReceiveRemoteControlEvent subType: UIEventSubtype, forItem item: AudioItem)
 }
 
 
@@ -822,9 +812,6 @@ public class AudioPlayer: NSObject {
     public func remoteControlReceivedWithEvent(event: UIEvent) {
         if event.type == .RemoteControl {
             //ControlCenter Or Lock screen
-            if let currentItem = currentItem {
-                delegate?.audioPlayer(self, didReceiveRemoteControlEvent: event.subtype, forItem: currentItem)
-            }
             switch event.subtype {
             case .RemoteControlBeginSeekingBackward:
                 rate = -(rate * rateMultiplerOnSeeking)
