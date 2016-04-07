@@ -186,6 +186,14 @@ public protocol AudioPlayerDelegate: NSObjectProtocol {
     func audioPlayer(audioPlayer: AudioPlayer, willStartPlayingItem item: AudioItem)
 
     /**
+     This method is called when the audio player finished playing an item.
+
+     - parameter audioPlayer: The audio player.
+     - parameter item:        The item that was finished playing.
+     */
+    func audioPlayer(audioPlayer: AudioPlayer, didFinishPlayingItem item: AudioItem)
+
+    /**
      This method is called a regular time interval while playing. It notifies
      the delegate that the current playing progression changed.
 
@@ -1044,6 +1052,7 @@ public class AudioPlayer: NSObject {
     */
     @objc private func playerItemDidEnd(note: NSNotification) {
         if let sender = note.object as? AVPlayerItem, currentItem = player?.currentItem where sender == currentItem {
+            delegate?.audioPlayer(self, didFinishPlayingItem: currentItem)
             nextOrStop()
         }
     }
