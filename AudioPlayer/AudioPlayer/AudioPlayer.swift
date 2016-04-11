@@ -233,6 +233,13 @@ public protocol AudioPlayerDelegate: NSObjectProtocol {
      - parameter item:        Current item.
      */
     func audioPlayer(audioPlayer: AudioPlayer, didLoadRange range: AudioPlayer.TimeRange, forItem item: AudioItem)
+
+    /**
+     This method allows to specify custom headers that would be sent for each request
+
+     - returns headers:       List of headers that should be sent for the NSURL request
+     */
+    func headers(URL: NSURL) -> [String: String]
 }
 
 
@@ -439,7 +446,7 @@ public class AudioPlayer: NSObject {
                     return
                 }
 
-                player = AVPlayer(URL: URLInfo.URL)
+                player = AVPlayer(playerItem: playerItemWithHeaders(URLInfo.URL))
                 player?.volume = volume
                 currentQuality = URLInfo.quality
 
@@ -1187,7 +1194,7 @@ public class AudioPlayer: NSObject {
 
                 if let URLInfo = URLInfo where URLInfo.quality != currentQuality {
                     let cip = currentItemProgression
-                    let item = AVPlayerItem(URL: URLInfo.URL)
+                    let item = playerItemWithHeaders(URLInfo.URL)
 
                     qualityIsBeingChanged = true
                     player?.replaceCurrentItemWithPlayerItem(item)
@@ -1215,7 +1222,7 @@ public class AudioPlayer: NSObject {
 
                 if let URLInfo = URLInfo where URLInfo.quality != currentQuality {
                     let cip = currentItemProgression
-                    let item = AVPlayerItem(URL: URLInfo.URL)
+                    let item = playerItemWithHeaders(URLInfo.URL)
 
                     qualityIsBeingChanged = true
                     player?.replaceCurrentItemWithPlayerItem(item)
@@ -1289,6 +1296,21 @@ public class AudioPlayer: NSObject {
         }
         else {
             enqueuedItems = enqueuedItems?.sort({ $0.position < $1.position })
+        }
+    }
+
+
+    // MARK: Helper
+
+    /**
+    Create AVPlayerItem with custom headers provided by the optional delegate method
+    */
+    private func playerItemWithHeaders(URL: NSURL) -> AVPlayerItem {
+        if let headers = delegate?.headers(URL) {
+            let asset = AVURLAsset(URL: URL, options: ["AVURLAssetHTTPHeaderFieldsKey": headers])
+            return AVPlayerItem(asset: asset)
+        } else {
+            return AVPlayerItem(URL: URL)
         }
     }
 }
