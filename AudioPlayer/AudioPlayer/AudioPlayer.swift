@@ -547,6 +547,9 @@ public class AudioPlayer: NSObject {
     /// Defines the maximum number of interruption to have within the `adjustQualityTimeInterval` delay before downgrading the quality. Default value is 3.
     public var adjustQualityAfterInterruptionCount = 3
 
+    /// Defines wheter the player queue should be cleared after the last item has been played or not. Default value is `true`.
+    public var clearQueueAfterFinish = true
+
     /// Defines the mode of the player. Default is `.Normal`.
     public var mode: AudioPlayerModeMask = [] {
         didSet {
@@ -1168,7 +1171,12 @@ public class AudioPlayer: NSObject {
             next()
         }
         else {
-            stop()
+            if clearQueueAfterFinish {
+                stop()
+            } else {
+                seekToTime(0)
+                pause()
+            }
         }
     }
 
