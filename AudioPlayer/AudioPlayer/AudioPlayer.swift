@@ -199,7 +199,7 @@ public protocol AudioPlayerDelegate: NSObjectProtocol {
 
      - parameter audioPlayer:    The audio player.
      - parameter time:           The current progression.
-     - parameter percentageRead: The percentage of the file that has been read. 
+     - parameter percentageRead: The percentage of the file that has been read.
                                  It's a Float value between 0 & 100 so that you can
                                 easily update an `UISlider` for example.
      */
@@ -345,10 +345,10 @@ public class AudioPlayer: NSObject {
 
     /// A boolean value indicating whether the player has been paused because of a system interruption.
     private var pausedForInterruption = false
-    
+
     /// The state before the player went into .Buffering. It helps to know whether to restart or not the player.
     private var stateBeforeBuffering: AudioPlayerState?
-    
+
     /// The time observer
     private var timeObserver: AnyObject?
 
@@ -775,11 +775,11 @@ public class AudioPlayer: NSObject {
                 // time is larger than possibly, so just move forward as far as possible
                 seekToSeekableRangeEnd(1)
             }
-            
+
             updateNowPlayingInfoCenter()
         }
     }
-    
+
     /**
      Seeks forward as far as possible.
 
@@ -798,7 +798,7 @@ public class AudioPlayer: NSObject {
 
     /**
      Seeks backwards as far as possible.
-     
+
      - parameter padding: The padding to apply if any.
      */
     public func seekToSeekableRangeStart(padding: NSTimeInterval) {
@@ -811,7 +811,7 @@ public class AudioPlayer: NSObject {
             updateNowPlayingInfoCenter()
         }
     }
-    
+
 
     #if os(iOS) || os(tvOS)
     /**
@@ -956,7 +956,7 @@ public class AudioPlayer: NSObject {
                         //We cancel the retry we might have asked for
                         retryTimer?.invalidate()
                         retryTimer = nil
-                        
+
                         endBackgroundTask()
                     }
 
@@ -1277,7 +1277,7 @@ public class AudioPlayer: NSObject {
             }
         #endif
     }
-    
+
     /**
     Ends the background task if there is one.
     */
@@ -1292,9 +1292,9 @@ public class AudioPlayer: NSObject {
         #endif
     }
 
-    
+
     // MARK: Mode
-    
+
     /**
     Sorts the queue depending on the current mode.
     */
