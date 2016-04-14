@@ -812,6 +812,38 @@ public class AudioPlayer: NSObject {
         }
     }
 
+    /**
+     Adjusts quality to the desired level.
+
+     - parameter quality: The quality to apply (should be different from the current quality).
+     */
+    public func adjustQuality(quality: AudioQuality) {
+        if let currentQuality = currentQuality, currentItem = self.currentItem {
+            let URLInfo: AudioItemURL = {
+                switch quality {
+                    case .Low:      return currentItem.lowestQualityURL
+                    case .Medium:   return currentItem.mediumQualityURL
+                    case .High:     return currentItem.highestQualityURL
+                }
+            }()
+
+            if URLInfo.quality != currentQuality {
+                let cip = currentItemProgression
+                let item = AVPlayerItem(URL: URLInfo.URL)
+
+                qualityIsBeingChanged = true
+                player?.replaceCurrentItemWithPlayerItem(item)
+                if let cip = cip {
+                    //We can't call self.seekToTime in here since the player is loading a new
+                    //item and `cip` is probably not in the seekableTimeRanges.
+                    player?.seekToTime(CMTime(seconds: cip, preferredTimescale: 1000000000))
+                }
+                qualityIsBeingChanged = false
+
+                self.currentQuality = URLInfo.quality
+            }
+        }
+    }
 
     #if os(iOS) || os(tvOS)
     /**
@@ -1181,7 +1213,6 @@ public class AudioPlayer: NSObject {
             }
         }
     }
-
 
     // MARK: Quality adjustment
 
