@@ -829,7 +829,7 @@ public class AudioPlayer: NSObject {
 
             if URLInfo.quality != currentQuality {
                 let cip = currentItemProgression
-                let item = AVPlayerItem(URL: URLInfo.URL)
+                let item = playerItemWithHeaders(URLInfo.URL)
 
                 qualityIsBeingChanged = true
                 player?.replaceCurrentItemWithPlayerItem(item)
