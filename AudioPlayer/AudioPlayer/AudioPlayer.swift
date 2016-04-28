@@ -672,8 +672,15 @@ public class AudioPlayer: NSObject {
     Resume the player.
     */
     public func resume() {
-        player?.rate = rate
-        state = .Playing
+        switch state {
+            case .Failed(_):
+                if let currentItemIndexInQueue = currentItemIndexInQueue {
+                    currentItem = enqueuedItems?[currentItemIndexInQueue].item
+                }
+            default:
+                player?.rate = rate
+                state = .Playing
+        }
     }
 
     /**
