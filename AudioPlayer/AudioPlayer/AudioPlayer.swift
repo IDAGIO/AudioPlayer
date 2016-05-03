@@ -849,6 +849,8 @@ public class AudioPlayer: NSObject {
 
                 self.currentQuality = URLInfo.quality
             }
+        } else {
+            currentQuality = nil
         }
     }
 
